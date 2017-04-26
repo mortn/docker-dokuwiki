@@ -1,13 +1,16 @@
-FROM alpine:3.4
+FROM alpine:3.5
 MAINTAINER Alexander Mueller <XelaRellum@web.de>
 
 ENV DOKUWIKI_VERSION c5525093cf2c4f47e2e5d2439fe13964
 #ENV MD5_CHECKSUM 9b9ad79421a1bdad9c133e859140f3f2
 
+RUN set -xe
+
 RUN apk update && apk upgrade
 
 RUN apk add --no-cache --virtual=run-deps \
-    php7 php7-fpm php7-gd php7-session php7-xml nginx supervisor curl tar
+    php7 php7-fpm php7-gd php7-session php7-xml \
+    libwebp nginx supervisor curl tar
 
 RUN mkdir -p /run/nginx && \
     mkdir -p /var/www /var/dokuwiki-storage/data && \
