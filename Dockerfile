@@ -4,7 +4,9 @@ MAINTAINER Alexander Mueller <XelaRellum@web.de>
 ENV DOKUWIKI_VERSION c5525093cf2c4f47e2e5d2439fe13964
 #ENV MD5_CHECKSUM 9b9ad79421a1bdad9c133e859140f3f2
 
-RUN apk --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ add \
+RUN apk update && apk upgrade
+
+RUN apk add --no-cache --virtual=run-deps \
     php7 php7-fpm php7-gd php7-session php7-xml nginx supervisor curl tar
 
 RUN mkdir -p /run/nginx && \
@@ -12,8 +14,9 @@ RUN mkdir -p /run/nginx && \
     cd /var/www && \
     curl -O -L "https://download.dokuwiki.org/out/dokuwiki-$DOKUWIKI_VERSION.tgz" && \
     tar -xzf "dokuwiki-$DOKUWIKI_VERSION.tgz" --strip 1 && \
-    rm "dokuwiki-$DOKUWIKI_VERSION.tgz" && \
-    mv /var/www/data/pages /var/dokuwiki-storage/data/pages && \
+    rm "dokuwiki-$DOKUWIKI_VERSION.tgz"
+    
+RUN mv /var/www/data/pages /var/dokuwiki-storage/data/pages && \
     ln -s /var/dokuwiki-storage/data/pages /var/www/data/pages && \
     mv /var/www/data/meta /var/dokuwiki-storage/data/meta && \
     ln -s /var/dokuwiki-storage/data/meta /var/www/data/meta && \
