@@ -1,5 +1,5 @@
-FROM alpine:3.4
-MAINTAINER Alexander Mueller <XelaRellum@web.de>
+FROM alpine:3.5
+LABEL maintainer "morten@abildgaard.org"
 
 ENV DOKUWIKI_VERSION release_stable_2017-02-19b
 
