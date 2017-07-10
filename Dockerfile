@@ -1,11 +1,7 @@
-FROM alpine:3.5
+FROM alpine:latest
 LABEL maintainer "morten@abildgaard.org"
 
 ENV DOKUWIKI_VERSION release_stable_2017-02-19b
-
-RUN apk update --no-cache \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/
 
 RUN apk upgrade --no-cache \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ \
@@ -24,21 +20,22 @@ RUN set -xe && \
     git init && \
     git remote add origin https://github.com/splitbrain/dokuwiki.git && \
     git fetch origin && \
-    git checkout $DOKUWIKI_VERSION && \
-    mv /var/www/data/pages /var/dokuwiki-storage/data/pages && \
-    ln -s /var/dokuwiki-storage/data/pages /var/www/data/pages && \
-    mv /var/www/data/meta /var/dokuwiki-storage/data/meta && \
-    ln -s /var/dokuwiki-storage/data/meta /var/www/data/meta && \
-    mv /var/www/data/media /var/dokuwiki-storage/data/media && \
-    ln -s /var/dokuwiki-storage/data/media /var/www/data/media && \
-    mv /var/www/data/media_attic /var/dokuwiki-storage/data/media_attic && \
-    ln -s /var/dokuwiki-storage/data/media_attic /var/www/data/media_attic && \
-    mv /var/www/data/media_meta /var/dokuwiki-storage/data/media_meta && \
-    ln -s /var/dokuwiki-storage/data/media_meta /var/www/data/media_meta && \
-    mv /var/www/data/attic /var/dokuwiki-storage/data/attic && \
-    ln -s /var/dokuwiki-storage/data/attic /var/www/data/attic && \
-    mv /var/www/conf /var/dokuwiki-storage/conf && \
-    ln -s /var/dokuwiki-storage/conf /var/www/conf
+    git checkout $DOKUWIKI_VERSION
+# && \
+#    mv /var/www/data/pages /var/dokuwiki-storage/data/pages && \
+#    ln -s /var/dokuwiki-storage/data/pages /var/www/data/pages && \
+#    mv /var/www/data/meta /var/dokuwiki-storage/data/meta && \
+#    ln -s /var/dokuwiki-storage/data/meta /var/www/data/meta && \
+#    mv /var/www/data/media /var/dokuwiki-storage/data/media && \
+#    ln -s /var/dokuwiki-storage/data/media /var/www/data/media && \
+#    mv /var/www/data/media_attic /var/dokuwiki-storage/data/media_attic && \
+#    ln -s /var/dokuwiki-storage/data/media_attic /var/www/data/media_attic && \
+#    mv /var/www/data/media_meta /var/dokuwiki-storage/data/media_meta && \
+#    ln -s /var/dokuwiki-storage/data/media_meta /var/www/data/media_meta && \
+#    mv /var/www/data/attic /var/dokuwiki-storage/data/attic && \
+#    ln -s /var/dokuwiki-storage/data/attic /var/www/data/attic && \
+#    mv /var/www/conf /var/dokuwiki-storage/conf && \
+#    ln -s /var/dokuwiki-storage/conf /var/www/conf
 
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD supervisord.conf /etc/supervisord.conf
@@ -53,6 +50,6 @@ RUN echo "cgi.fix_pathinfo = 0;" >> /etc/php7/php-fpm.ini && \
     chmod +x /start.sh
 
 EXPOSE 80
-VOLUME ["/var/dokuwiki-storage"]
+VOLUME ["/var/www/data"]
 
-CMD /start.sh
+ENTRYPOINT ["/start.sh"]
