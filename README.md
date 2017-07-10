@@ -1,12 +1,12 @@
 xlrl/dokuwiki
 ==================
 
-[![Docker Stars](https://img.shields.io/docker/stars/xlrl/dokuwiki.svg)](https://hub.docker.com/r/xlrl/dokuwiki/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/xlrl/dokuwiki.svg)](https://hub.docker.com/r/xlrl/dokuwiki/)
-[![Docker Build](https://img.shields.io/docker/automated/xlrl/dokuwiki.svg)](https://hub.docker.com/r/xlrl/dokuwiki/)
-[![Layers](https://images.microbadger.com/badges/image/xlrl/dokuwiki.svg)](https://microbadger.com/images/xlrl/dokuwiki)
-[![Version](https://images.microbadger.com/badges/version/xlrl/dokuwiki.svg)](https://microbadger.com/images/xlrl/dokuwiki)
-[![Join the chat at https://gitter.im/xlrl/docker-dokuwiki](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/xlrl/docker-dokuwiki?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Docker Stars](https://img.shields.io/docker/stars/mortn/docker-dokuwiki.svg)](https://hub.docker.com/r/mortn/docker-dokuwiki/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/mortn/docker-dokuwiki.svg)](https://hub.docker.com/r/mortn/docker-dokuwiki/)
+[![Docker Build](https://img.shields.io/docker/automated/mortn/docker-dokuwiki.svg)](https://hub.docker.com/r/mortn/docker-dokuwiki/)
+[![Layers](https://images.microbadger.com/badges/image/mortn/docker-dokuwiki.svg)](https://microbadger.com/images/mortn/docker-dokuwiki)
+[![Version](https://images.microbadger.com/badges/version/mortn/docker-dokuwiki.svg)](https://microbadger.com/images/mortn/docker-dokuwiki)
+[![Join the chat at https://gitter.im/mortn/docker-dokuwiki](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mortn/docker-dokuwiki?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Docker container image with [DokuWiki](https://www.dokuwiki.org/dokuwiki) and nginx
 
@@ -16,7 +16,7 @@ Assume your docker host is localhost and HTTP public port is 8000 (change these 
 
 First, run new dokuwiki container:
 
-    docker run -d -p 8000:80 --name dokuwiki xlrl/dokuwiki:2.0
+    docker run -d -p 8000:80 --name dokuwiki mortn/docker-dokuwiki
 
 Then setup dokuwiki using installer at URL `http://localhost:8000/install.php`
 
@@ -31,7 +31,7 @@ To make sure data won't be deleted if container is removed, create an empty cont
     docker stop dokuwiki && docker rm dokuwiki
 
     # to restore dokuwiki, create new dokuwiki container and attach dokuwiki-data volume to it
-    docker run -d -p 8000:80 --volumes-from dokuwiki-data --name dokuwiki xlrl/dokuwiki:2.0
+    docker run -d -p 8000:80 -v /srv/dokuwiki:/var/www/data --name dokuwiki mortn/docker-dokuwiki:2.0
 
 ### Persistent plugins
 
@@ -39,8 +39,8 @@ Dokuwiki installs plugins to `lib/plugins/`, but this folder isn't inside persis
 
 Example (install [Dokuwiki ToDo](https://www.dokuwiki.org/plugin:todo) plugin):
 
-    FROM xlrl/dokuwiki
-    MAINTAINER Ilya Stepanov <dev@ilyastepanov.com>
+    FROM mortn/docker-dokuwiki
+    MAINTAINER Morten Abildgaard <morten@abildgaard.org>
 
     # this is an example Dockerfile that demonstrates how to add Dokuwiki plugins to xlrl/dokuwiki image
 
@@ -72,7 +72,7 @@ Example (install [Dokuwiki ToDo](https://www.dokuwiki.org/plugin:todo) plugin):
 ### How to restore from backup
 
     #create new dokuwiki container, but don't start it yet
-    docker create -p 8000:80 --name dokuwiki xlrl/dokuwiki:2.0
+    docker create -p 8000:80 --name dokuwiki mortn/docker-dokuwiki:2.0
 
     # create data container for persistency (optional)
     docker run --volumes-from dokuwiki --name dokuwiki-data busybox
